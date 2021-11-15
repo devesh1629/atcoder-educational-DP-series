@@ -1,0 +1,107 @@
+
+Sorting
+
+For sorting arrays or vectors of struct outside classes,
+we use
+
+struct Node {
+	int id;
+	string name;
+	int marks;
+};
+bool compare(Node a, Node b) {
+	return a.id < b.id;
+}
+sort(arr.begin(), arr.end(), compare);
+
+
+Comparator Classes are used to compare the objects of user-defined classes.
+
+class xyz {
+public:
+    bool operator()(student a, student b)
+    {
+        return a.rollnum < b.rollnum;
+    }
+};
+sort(arr.begin(), arr.end(), xyz());
+
+for min_heap and max_heap
+
+struct Node {
+    ListNode *curr;
+    int index;
+    Node(ListNode* a, int b) {
+        curr=a;
+        index=b;
+    }
+};
+struct compare {
+    bool operator()(Node const& a, Node const& b) {
+        return a.curr->val > b.curr->val;
+    }
+};
+priority_queue<Node, vector<Node>, compare > min_heap;
+
+Detect cycles
+
+1) Undirected graph:
+
+// using BFS
+bool isCyclic(vector<int> adj[], int n) {
+	vector<int> parent(n, -1);
+	vector<bool> vis(n, false);
+	queue<int> q;
+	q.push(1);
+	vis[1]=true;
+	while(!q.empty()) {
+		int u=q.front();
+		q.pop();
+		for(aut0 it : adj[u]) {
+			if(!vis[it]) {
+				q.push(it);
+				parent[it]=u;
+				vis[it]=true;
+			}
+			else if(it != parent[it])
+				return true;
+		}
+	}
+	return false;
+}
+
+//using DFS
+bool isCyclic(int u, int v, bool vis[], vector<int> adj[]) {
+    vis[u] = true;
+    for(auto it : adj[u]) {
+        if(!vis[it]) {
+            if(isCyclic(it, u, vis, adj))
+                return true;
+        }
+        else if(it != v)
+            return true;
+    }
+    return false;
+}
+
+// using DSU
+
+2) Directed Graphs
+
+// using colors (DFS)
+// color 0 means unvisited, 1 means visiting (inside dfs stack), 2 means visited along with all its descendants
+
+bool isCyclic(vector<int> adj[], int u, int color[]) {
+	color[u]=1;
+	for(auto it : adj[u]) {
+		if(color[it]==0 && isCyclic(adj, it, color))
+			return true;
+		else if(color[it] == 1)
+			return true;
+	}
+	color[u]=2;
+	return false;
+}
+
+
+
